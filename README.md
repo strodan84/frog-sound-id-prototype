@@ -1,7 +1,32 @@
-# 🌿 iNaturalist Sound ID: End-to-End Bioacoustic Pipeline Prototype 
+# 🌿 Frog Sound ID: End-to-End Bioacoustic Pipeline Prototype 
 
-An applied ML engineering showcase demonstrating an end-to-end signal processing and computer vision pipeline for classifying animal vocalizations. This architecture transforms raw 1D audio waveforms into 2D Mel-spectrogram images, handles heavy class imbalances via custom batch sampling, trains a convolutional neural network (CNN), and optimizes the final asset via INT8 quantization for ultra-low latency mobile deployment.
+An applied ML engineering showcase demonstrating an end-to-end signal processing and computer vision pipeline for classifying frog vocalizations. This architecture transforms raw 1D audio waveforms into 2D Mel-spectrogram images, handles heavy class imbalances via custom batch sampling, trains a convolutional neural network (CNN), and optimizes the final asset via INT8 quantization for ultra-low latency mobile deployment.
 
+----------------------------------------------
+### Top 10 Frog/Toad Species of Southern New Jersey
+Here are the top 10 frog and toad species native to Southern New Jersey (and the Pine Barrens) that have substantial acoustic footprints on [xeno-canto](https://xeno-canto.org):
+
+* **Pine Barrens Treefrog** ***(Hyla andersonii)*** – The local icon. High conservation value and a distinct, nasal "quank" call.
+
+* **Fowler's Toad** ***(Anaxyrus fowleri)*** – Extremely common in South Jersey sandy soils; makes a nasal, unmusical drone.
+
+* **Green Frog** ***(Lithobates clamitans)*** – Found in almost every pond; sounds exactly like a loose banjo string.
+
+* **Bullfrog** ***(Lithobates catesbeianus)*** – The classic, deep, resonant "jug-o-rum" bass call.
+
+* **New Jersey Chorus Frog** ***(Pseudacris kalmi)*** – An early spring breeder with a call like running a finger down a plastic comb.
+
+* **Spring Peeper** ***(Pseudacris crucifer)*** – High-pitched, piercing bird-like whistles that dominate early spring nights.
+
+* **Southern Leopard Frog** ***(Lithobates sphenocephalus)*** – Common in coastal plains; makes a distinct chuckling, guttural croak.
+
+* **Wood Frog** ***(Lithobates sylvaticus)*** – Explosive early breeders that sound like a flock of ducks quacking in the woods.
+
+* **Gray Treefrog** ***(Hyla versicolor)*** – Loud, musical, bird-like trills heard throughout summer evenings.
+
+* **Cope's Gray Treefrog** ***(Hyla chrysoscelis)*** – Visually identical to the Gray Treefrog but has a distinctly faster, harsher trill frequency (a perfect test case for ML separation!).
+
+----------------------------------------------
 ## 🏗️ Pipeline Architecture
 
 ```mermaid
