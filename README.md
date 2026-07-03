@@ -27,6 +27,11 @@ Here are the top 10 frog and toad species native to Southern New Jersey (and the
 * **Cope's Gray Treefrog** ***(Hyla chrysoscelis)*** – Visually identical to the Gray Treefrog but has a distinctly faster, harsher trill frequency (a perfect test case for ML separation!).
 
 ----------------------------------------------
+## Dataset & Data Curation
+
+Data Curation & Reproducibility: To respect data hosting limits and maintain a lightweight repository footprint, raw audio assets are not tracked via version control. The dataset utilizes (up to) 10 core indicator species of the Southern New Jersey coastal plain and Pine Barrens ecosystem. Complete metadata, including xeno-canto catalog numbers and recording credits, is provided in ```data/dataset_manifest.csv```. Running python ```src/download_data.py``` will automatically fetch and structure the target audio files.
+
+----------------------------------------------
 ## 🏗️ Pipeline Architecture
 
 ```mermaid
