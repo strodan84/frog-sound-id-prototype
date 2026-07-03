@@ -6,7 +6,7 @@ An applied ML engineering showcase demonstrating an end-to-end signal processing
 ### Top 10 Frog/Toad Species of Southern New Jersey
 Here are the top 10 frog and toad species native to Southern New Jersey (and the Pine Barrens) that have substantial acoustic footprints on [xeno-canto](https://xeno-canto.org):
 
-* **Pine Barrens Treefrog** ***(Hyla andersonii)*** – The local icon. High conservation value and a distinct, nasal "quank" call.
+* **Pine Barrens Treefrog** ***(Dryophytes andersonii)*** – The local icon. High conservation value and a distinct, nasal "quank" call.
 
 * **Fowler's Toad** ***(Anaxyrus fowleri)*** – Extremely common in South Jersey sandy soils; makes a nasal, unmusical drone.
 
