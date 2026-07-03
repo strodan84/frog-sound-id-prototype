@@ -216,3 +216,9 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Ignore raw binary data assets
+data/raw/
+
+# Keep the data directory structural footprint, but ignore its contents
+!data/.gitkeep
