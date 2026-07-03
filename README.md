@@ -6,13 +6,11 @@ An applied ML engineering showcase demonstrating an end-to-end signal processing
 ### Top 10 Frog/Toad Species of Southern New Jersey
 Here are the top 10 frog and toad species native to Southern New Jersey (and the Pine Barrens) that have substantial acoustic footprints on [xeno-canto](https://xeno-canto.org):
 
-* **Pine Barrens Treefrog** ***(Hyla andersonii)*** – The local icon. High conservation value and a distinct, nasal "quank" call.
-
 * **Fowler's Toad** ***(Anaxyrus fowleri)*** – Extremely common in South Jersey sandy soils; makes a nasal, unmusical drone.
 
-* **Green Frog** ***(Lithobates clamitans)*** – Found in almost every pond; sounds exactly like a loose banjo string.
+* **Bronze Frog** ***(Aquarana clamitans)*** – A.k.a. "Green Frog". Found in almost every pond; sounds exactly like a loose banjo string.
 
-* **Bullfrog** ***(Lithobates catesbeianus)*** – The classic, deep, resonant "jug-o-rum" bass call.
+* **American Bullfrog** ***(Aquarana catesbeianus)*** – The classic, deep, resonant "jug-o-rum" bass call.
 
 * **New Jersey Chorus Frog** ***(Pseudacris kalmi)*** – An early spring breeder with a call like running a finger down a plastic comb.
 
@@ -20,11 +18,20 @@ Here are the top 10 frog and toad species native to Southern New Jersey (and the
 
 * **Southern Leopard Frog** ***(Lithobates sphenocephalus)*** – Common in coastal plains; makes a distinct chuckling, guttural croak.
 
-* **Wood Frog** ***(Lithobates sylvaticus)*** – Explosive early breeders that sound like a flock of ducks quacking in the woods.
+* **Wood Frog** ***(Boreorana sylvaticus)*** – Explosive early breeders that sound like a flock of ducks quacking in the woods.
 
-* **Gray Treefrog** ***(Hyla versicolor)*** – Loud, musical, bird-like trills heard throughout summer evenings.
+* **Eastern Gray Treefrog** ***(Dryophytes versicolor)*** – Loud, musical, bird-like trills heard throughout summer evenings.
 
-* **Cope's Gray Treefrog** ***(Hyla chrysoscelis)*** – Visually identical to the Gray Treefrog but has a distinctly faster, harsher trill frequency (a perfect test case for ML separation!).
+* **Cope's Gray Treefrog** ***(Dryophytes chrysoscelis)*** – Visually identical to the Gray Treefrog but has a distinctly faster, harsher trill frequency (a perfect test case for ML separation!).
+
+* **Pine Barrens Treefrog** ***(Dryophytes andersonii)*** – The local icon. High conservation value and a distinct, nasal "quank" call.
+
+*Note: nomenclature is based on taxonomy on July 3, 2026*
+
+----------------------------------------------
+## Dataset & Data Curation
+
+Data Curation & Reproducibility: To respect data hosting limits and maintain a lightweight repository footprint, raw audio assets are not tracked via version control. The dataset utilizes (up to) 10 core indicator species of the Southern New Jersey coastal plain and Pine Barrens ecosystem. Complete metadata, including xeno-canto catalog numbers and recording credits, is provided in ```data/dataset_manifest.csv```. Running python ```src/download_data.py``` will automatically fetch and structure the target audio files.
 
 ----------------------------------------------
 ## 🏗️ Pipeline Architecture
