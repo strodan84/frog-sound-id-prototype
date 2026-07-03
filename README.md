@@ -6,8 +6,6 @@ An applied ML engineering showcase demonstrating an end-to-end signal processing
 ### Top 10 Frog/Toad Species of Southern New Jersey
 Here are the top 10 frog and toad species native to Southern New Jersey (and the Pine Barrens) that have substantial acoustic footprints on [xeno-canto](https://xeno-canto.org):
 
-* **Pine Barrens Treefrog** ***(Dryophytes andersonii)*** – The local icon. High conservation value and a distinct, nasal "quank" call.
-
 * **Fowler's Toad** ***(Anaxyrus fowleri)*** – Extremely common in South Jersey sandy soils; makes a nasal, unmusical drone.
 
 * **Bronze Frog** ***(Aquarana clamitans)*** – A.k.a. "Green Frog". Found in almost every pond; sounds exactly like a loose banjo string.
@@ -20,11 +18,15 @@ Here are the top 10 frog and toad species native to Southern New Jersey (and the
 
 * **Southern Leopard Frog** ***(Lithobates sphenocephalus)*** – Common in coastal plains; makes a distinct chuckling, guttural croak.
 
-* **Wood Frog** ***(Lithobates sylvaticus)*** – Explosive early breeders that sound like a flock of ducks quacking in the woods.
+* **Wood Frog** ***(Boreorana sylvaticus)*** – Explosive early breeders that sound like a flock of ducks quacking in the woods.
 
-* **Gray Treefrog** ***(Hyla versicolor)*** – Loud, musical, bird-like trills heard throughout summer evenings.
+* **Eastern Gray Treefrog** ***(Dryophytes versicolor)*** – Loud, musical, bird-like trills heard throughout summer evenings.
 
-* **Cope's Gray Treefrog** ***(Hyla chrysoscelis)*** – Visually identical to the Gray Treefrog but has a distinctly faster, harsher trill frequency (a perfect test case for ML separation!).
+* **Cope's Gray Treefrog** ***(Dryophytes chrysoscelis)*** – Visually identical to the Gray Treefrog but has a distinctly faster, harsher trill frequency (a perfect test case for ML separation!).
+
+* * **Pine Barrens Treefrog** ***(Dryophytes andersonii)*** – The local icon. High conservation value and a distinct, nasal "quank" call.
+
+*Note: nomenclature is based on taxonomy on July 3, 2026*
 
 ----------------------------------------------
 ## Dataset & Data Curation
