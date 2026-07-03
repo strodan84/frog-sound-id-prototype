@@ -10,9 +10,9 @@ Here are the top 10 frog and toad species native to Southern New Jersey (and the
 
 * **Fowler's Toad** ***(Anaxyrus fowleri)*** – Extremely common in South Jersey sandy soils; makes a nasal, unmusical drone.
 
-* **Green Frog** ***(Lithobates clamitans)*** – Found in almost every pond; sounds exactly like a loose banjo string.
+* **Bronze Frog** ***(Aquarana clamitans)*** – A.k.a. "Green Frog". Found in almost every pond; sounds exactly like a loose banjo string.
 
-* **Bullfrog** ***(Lithobates catesbeianus)*** – The classic, deep, resonant "jug-o-rum" bass call.
+* **American Bullfrog** ***(Aquarana catesbeianus)*** – The classic, deep, resonant "jug-o-rum" bass call.
 
 * **New Jersey Chorus Frog** ***(Pseudacris kalmi)*** – An early spring breeder with a call like running a finger down a plastic comb.
 
