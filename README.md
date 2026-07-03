@@ -24,7 +24,7 @@ Here are the top 10 frog and toad species native to Southern New Jersey (and the
 
 * **Cope's Gray Treefrog** ***(Dryophytes chrysoscelis)*** – Visually identical to the Gray Treefrog but has a distinctly faster, harsher trill frequency (a perfect test case for ML separation!).
 
-* * **Pine Barrens Treefrog** ***(Dryophytes andersonii)*** – The local icon. High conservation value and a distinct, nasal "quank" call.
+* **Pine Barrens Treefrog** ***(Dryophytes andersonii)*** – The local icon. High conservation value and a distinct, nasal "quank" call.
 
 *Note: nomenclature is based on taxonomy on July 3, 2026*
 
