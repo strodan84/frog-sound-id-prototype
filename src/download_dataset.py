@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-iNaturalist Sound ID Prototype - Data Ingestion Engine
-Downloads high-quality amphibian recordings from the Xeno-Canto REST API 
-for key indicator species native to the Southern New Jersey Coastal Plain.
+🌿 iNaturalist Sound ID Prototype - Direct Asset Downloader
+Reads the existing dataset_manifest.csv file and directly streams 
+the audio assets using the URLs provided.
 """
 
 import os
@@ -10,127 +10,88 @@ import time
 import requests
 import pandas as pd
 
-# Define target indicator species (Scientific Name -> Common Name)
-TARGET_SPECIES = {
-    "Dryophytes andersonii": "Pine Barrens Treefrog",
-    "Anaxyrus fowleri": "Fowlers Toad",
-    "Lithobates clamitans": "Green Frog",
-    "Lithobates catesbeianus": "Bullfrog",
-    "Pseudacris kalmi": "New Jersey Chorus Frog",
-    "Pseudacris crucifer": "Spring Peeper",
-    "Lithobates sphenocephalus": "Southern Leopard Frog",
-    "Lithobates sylvaticus": "Wood Frog",
-    "Hyla versicolor": "Gray Treefrog",
-    "Hyla chrysoscelis": "Copes Gray Treefrog"
-}
-
-DATA_DIR = "data/raw"
 MANIFEST_PATH = "data/dataset_manifest.csv"
-MAX_RECORDINGS_PER_SPECIES = 5  # Keeps the initial prototype pipeline fast
-
-def setup_directories():
-    """Ensure raw audio target folders exist."""
-    for species in TARGET_SPECIES.keys():
-        folder_name = species.lower().replace(" ", "_")
-        os.makedirs(os.path.join(DATA_DIR, folder_name), exist_ok=True)
-
-def fetch_recordings_metadata(species_name):
-    """Query the Xeno-Canto API for high-quality audio files from the US."""
-    base_url = "https://xeno-canto.org/api/2/recordings"
-    
-    # Construct an API query string restricting group, location, and quality
-    # grp:frogs -> targets amphibians instead of birds
-    query = f'{species_name} cnt:"United States" grp:frogs q:A'
-    params = {"query": query}
-    
-    try:
-        response = requests.get(base_url, params=params, timeout=15)
-        response.raise_for_status()
-        data = response.json()
-        
-        # Fallback to Quality B if Quality A returns zero results
-        if int(data.get("numRecordings", 0)) == 0:
-            query = f'{species_name} cnt:"United States" grp:frogs q:B'
-            response = requests.get(base_url, params={"query": query}, timeout=15)
-            data = response.json()
-            
-        return data.get("recordings", [])
-    except Exception as e:
-        print(f"⚠️ Error querying API for {species_name}: {e}")
-        return []
+DATA_DIR = "data/raw"
 
 def download_audio_file(download_url, output_path):
-    """Stream download the binary asset with proper connection error handling."""
+    """Stream download the binary asset safely from a direct URL."""
+    # Fix any accidental double 'o' typos in the URL string dynamically
+    if "xeno-cantoo.org" in download_url:
+        download_url = download_url.replace("xeno-cantoo.org", "xeno-canto.org")
+        
     try:
-        with requests.get(download_url, stream=True, timeout=30) as r:
+        # Xeno-canto requires a user-agent string so it doesn't block the request
+        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
+        with requests.get(download_url, headers=headers, stream=True, timeout=30) as r:
             r.raise_for_status()
             with open(output_path, 'wb') as f:
                 for chunk in r.iter_content(chunk_size=8192):
                     f.write(chunk)
         return True
     except Exception as e:
-        print(f"   ❌ Download failed for {download_url}: {e}")
+        print(f"\n   ❌ Download failed for {download_url}: {e}")
         return False
 
 def main():
-    print("Starting Bioacoustic Data Ingestion Pipeline...")
-    setup_directories()
+    if not os.path.exists(MANIFEST_PATH):
+        print(f"❌ Error: Cannot find your manifest file at {MANIFEST_PATH}")
+        print("Please ensure your CSV is saved there before running.")
+        return
+
+    print("🚀 Reading your custom manifest and starting direct downloads...")
+    df = pd.read_csv(MANIFEST_PATH)
     
-    manifest_records = []
+    # Clean up column names just in case there are trailing spaces
+    df.columns = df.columns.str.strip()
     
-    for scientific_name, common_name in TARGET_SPECIES.items():
-        print(f"\n🔍 Processing: {common_name} ({scientific_name})")
-        recordings = fetch_recordings_metadata(scientific_name)
+    # Dynamically find your URL column (assuming it's the last column or named 'source_url')
+    url_col = 'source_url' if 'source_url' in df.columns else df.columns[-1]
+    species_col = 'species_code' if 'species_code' in df.columns else df.columns[0]
+    id_col = 'xc_id' if 'xc_id' in df.columns else None
+
+    successful_downloads = 0
+
+    for idx, row in df.iterrows():
+        species_slug = str(row[species_col]).lower().replace(" ", "_")
+        download_url = str(row[url_col]).strip()
         
-        if not recordings:
-            print(f"   No high-quality recordings found via API filters.")
-            continue
-            
-        # Slice to ensure balanced class distributions for the prototype
-        selected_recordings = recordings[:MAX_RECORDINGS_PER_SPECIES]
-        print(f"   Found {len(recordings)} matches. Downloading top {len(selected_recordings)}...")
+        # Append /download to xeno-canto page URLs if not already present
+        if "xeno-canto.org" in download_url and not download_url.endswith("/download"):
+            # If the URL is just a base link like https://xeno-canto.org/12345
+            if download_url.split('/')[-1].isdigit():
+                rec_id = download_url.split('/')[-1]
+                download_url = f"https://xeno-canto.org/{rec_id}/download"
         
-        species_slug = scientific_name.lower().replace(" ", "_")
+        # Determine file name
+        rec_id = row[id_col] if id_col and pd.notna(row[id_col]) else idx
+        filename = f"XC_{rec_id}.mp3"
         
-        for rec in selected_recordings:
-            rec_id = rec.get("id")
-            # The API returns direct audio streaming paths at: xeno-canto.org/{id}/download
-            download_url = f"https://xeno-canto.org/{rec_id}/download"
-            
-            # Xeno-canto files are typically delivered as MP3s
-            filename = f"XC_{rec_id}.mp3"
-            relative_path = os.path.join(DATA_DIR, species_slug, filename)
-            
-            print(f"   📥 Fetching asset ID {rec_id}...", end="", flush=True)
-            
-            if os.path.exists(relative_path):
-                print(" [Skipped: Already Exists]")
-                success = True
-            else:
-                success = download_audio_file(download_url, relative_path)
-                if success:
-                    print(" [Done]")
-                # Polite rate-limiting to preserve server bandwidth
-                time.sleep(1.5)
-                
+        # Build paths
+        species_dir = os.path.join(DATA_DIR, species_slug)
+        os.makedirs(species_dir, exist_ok=True)
+        relative_path = os.path.join(species_dir, filename)
+        
+        print(f"📥 [{idx+1}/{len(df)}] Fetching asset for {species_slug}...", end="", flush=True)
+        
+        if os.path.exists(relative_path):
+            print(" [Skipped: Exists]")
+            successful_downloads += 1
+        else:
+            # If your URL is just a reference link, we convert it to the download stream
+            success = download_audio_file(download_url, relative_path)
             if success:
-                manifest_records.append({
-                    "species_code": species_slug,
-                    "scientific_name": scientific_name,
-                    "common_name": common_name,
-                    "xc_id": rec_id,
-                    "local_path": relative_path,
-                    "quality": rec.get("q"),
-                    "length_sec": rec.get("length")
-                })
-                
-    # Export a structured manifest file used by our PyTorch Dataset class
-    if manifest_records:
-        df = pd.DataFrame(manifest_records)
-        df.to_csv(MANIFEST_PATH, index=False)
-        print(f"\n✅ Pipeline Complete! Metadata manifest exported to {MANIFEST_PATH}")
-    else:
-        print("\n❌ Pipeline completed with 0 downloaded records.")
+                print(" [Done]")
+                successful_downloads += 1
+            time.sleep(1.2) # Polite padding between server requests
+
+    print(f"\n✅ Pipeline Complete! Successfully verified/downloaded {successful_downloads} assets.")
 
 if __name__ == "__main__":
     main()
+
+
+
+
+
+
+
