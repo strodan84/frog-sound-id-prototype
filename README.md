@@ -43,7 +43,7 @@ graph TD
     C -->|Weighted Random Sampler| D[PyTorch EfficientNet / ResNet]
     D -->|Frequency & Time Masking| E[Species Inference Matrix]
     E -->|Post-Training Quantization| F[Edge-Optimized TFLite Engine]
-
+```
 ----------------------------------------------
 ## Bioacoustic Feature Processing
 
