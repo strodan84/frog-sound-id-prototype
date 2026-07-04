@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-🌿 iNaturalist Sound ID - Multi-Species Grid Visualizer
-Generates a comparative grid of Mel-Spectrogram signatures for your README.
+🌿 iNaturalist Sound ID - Multi-Species Grid Visualizer (Common Names)
+Generates a comparative grid of Mel-Spectrogram signatures labeled with common names.
 """
 
 import os
@@ -9,32 +9,49 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 
+RAW_MANIFEST = "data/dataset_manifest.csv"
 PROCESSED_MANIFEST = "data/processed_manifest.csv"
 
 def generate_species_grid():
-    if not os.path.exists(PROCESSED_MANIFEST):
-        print("❌ Cannot find processed manifest. Run preprocess.py first.")
+    if not os.path.exists(PROCESSED_MANIFEST) or not os.path.exists(RAW_MANIFEST):
+        print("❌ Cannot find manifest files. Ensure pipelines have run successfully.")
         return
         
-    df = pd.read_csv(PROCESSED_MANIFEST)
+    # Load data maps
+    df_raw = pd.read_csv(RAW_MANIFEST)
+    df_proc = pd.read_csv(PROCESSED_MANIFEST)
     
-    # Extract the first sample path for every unique species code
-    species_representatives = df.groupby('species_code').first().reset_index()
+    # Clean string buffers to ensure flawless merging
+    df_raw.columns = df_raw.columns.str.strip()
+    df_proc.columns = df_proc.columns.str.strip()
+    
+    # Identify key tracking columns dynamically
+    raw_species_col = 'species_code' if 'species_code' in df_raw.columns else df_raw.columns[0]
+    common_name_col = 'common_name' if 'common_name' in df_raw.columns else None
+    
+    if common_name_col is None:
+        print("⚠️ 'common_name' column missing from raw manifest. Defaulting to short names.")
+        name_mapping = {}
+    else:
+        # Create a fast lookup table: { 'pseudacris_crucifer': 'Spring Peeper' }
+        name_mapping = dict(zip(df_raw[raw_species_col].str.lower(), df_raw[common_name_col]))
+
+    # Grab the first processed sample path for every unique species code
+    species_representatives = df_proc.groupby('species_code').first().reset_index()
     num_species = len(species_representatives)
     
     if num_species == 0:
         print("❌ No processed species arrays found in manifest.")
         return
 
-    print(f"📊 Mapping a {num_species}-panel visual grid...")
+    print(f"📊 Mapping a {num_species}-panel visual grid with common names...")
     
-    # Calculate grid layout dynamically (aiming for 2 or 3 columns)
+    # Calculate grid layout dimensions dynamically
     cols = 3 if num_species >= 3 else num_species
     rows = int(np.ceil(num_species / cols))
     
     fig, axes = plt.subplots(rows, cols, figsize=(5 * cols, 3.5 * rows), sharex=True, sharey=True)
     
-    # Flatten axes array for simple iteration if it's multi-dimensional
     if num_species > 1:
         axes = axes.flatten()
     else:
@@ -42,7 +59,10 @@ def generate_species_grid():
         
     for idx, row in species_representatives.iterrows():
         ax = axes[idx]
-        species_slug = row['species_code']
+        species_slug = row['species_code'].lower()
+        
+        # Check our lookup dictionary for the clean common name, fall back to capitalized slug
+        display_label = name_mapping.get(species_slug, species_slug.replace('_', ' ').title())
         
         # Format Windows/Unix path strings cleanly
         file_path = row['processed_path'].replace('\\', '/')
@@ -50,25 +70,20 @@ def generate_species_grid():
             file_path = file_path[3:]
             
         try:
-            # Load the 2D array matrix
             spectrogram = np.load(file_path)
             
-            # Draw the heatmap panel
-            im = ax.imshow(spectrogram, aspect='auto', origin='lower', cmap='magma')
-            
-            # Title treatment formatting (e.g., "pseudacris_crucifer" -> "Pseudacris Crucifer")
-            clean_title = species_slug.replace('_', ' ').title()
-            ax.set_title(clean_title, fontsize=10, fontweight='bold', pad=8)
+            # Use the 'magma' or 'viridis' colormap for clean bioacoustic rendering
+            ax.imshow(spectrogram, aspect='auto', origin='lower', cmap='magma')
+            ax.set_title(display_label, fontsize=11, fontweight='bold', pad=8)
             
         except Exception as e:
-            ax.text(0.5, 0.5, f"Load Error", ha='center', va='center', color='red')
+            ax.text(0.5, 0.5, "Load Error", ha='center', va='center', color='red')
             print(f"⚠️ Failed to load array for {species_slug}: {e}")
             
-    # Hide any leftover empty panels if our grid math has remaining slots
+    # Remove empty subplots from the frame layout if grid is partially filled
     for extra_idx in range(num_species, len(axes)):
         fig.delaxes(axes[extra_idx])
         
-    # Label layout boundaries
     fig.text(0.5, 0.01, 'Temporal Frames', ha='center', fontsize=11, fontweight='bold')
     fig.text(0.01, 0.5, 'Mel Frequency Bands', va='center', rotation='vertical', fontsize=11, fontweight='bold')
     
