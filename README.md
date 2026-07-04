@@ -1,6 +1,7 @@
-# 🌿 Frog Sound ID: End-to-End Bioacoustic Pipeline Prototype 
+# 🐸 ANURA: Amphibian Network for Ultra-low-latency Recognition Architecture
+### End-to-End Signal Processing & Bioacoustic Edge ML Pipeline 
 
-An applied ML engineering showcase demonstrating an end-to-end signal processing and computer vision pipeline for classifying frog vocalizations. This architecture transforms raw 1D audio waveforms into 2D Mel-spectrogram images, handles heavy class imbalances via custom batch sampling, trains a convolutional neural network (CNN), and optimizes the final asset via INT8 quantization for ultra-low latency mobile deployment.
+An applied ML engineering showcase demonstrating an end-to-end signal processing and computer vision pipeline for classifying frog/toad (anuran) vocalizations. This architecture transforms raw 1D audio waveforms into 2D Mel-spectrogram images, handles heavy class imbalances via custom batch sampling, trains a convolutional neural network (CNN), and optimizes the final asset via INT8 quantization for ultra-low latency mobile deployment.
 
 ----------------------------------------------
 ### Top 10 Frog/Toad Species of Southern New Jersey
