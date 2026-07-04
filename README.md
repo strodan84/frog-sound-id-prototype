@@ -43,3 +43,10 @@ graph TD
     C -->|Weighted Random Sampler| D[PyTorch EfficientNet / ResNet]
     D -->|Frequency & Time Masking| E[Species Inference Matrix]
     E -->|Post-Training Quantization| F[Edge-Optimized TFLite Engine]
+
+----------------------------------------------
+## Bioacoustic Feature Processing
+
+Before training our machine learning pipeline, raw 1D audio waveforms are standardized to 22.05 kHz, normalized, and mapped into fixed-length 3-second 2D Log-Mel Spectrogram footprints. This exposes distinct frequency signatures across target frog species:
+
+![Taxonomic Spectrogram Grid](assets/species_spectrogram_grid.png)
